@@ -71,8 +71,12 @@ trait Utils
      * @return [type] [description]
      */
     protected function resolveUrl($path)
-    {
-        return $this->clearDblSlash("{$this->baseUrl}/{$path}");
+    {   
+        if (config('mediaManager.storage_disk') == 's3') {
+            return $this->storageDisk->temporaryUrl($path, now()->addMinutes(10));
+        } else {
+            return $this->clearDblSlash("{$this->baseUrl}/{$path}");
+        }
     }
 
     protected function clearDblSlash($str)
